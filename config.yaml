@@ -1,0 +1,55 @@
+# ---------------------------------------------------------------
+# What the bot looks for. Edit freely — no code changes needed.
+# ---------------------------------------------------------------
+
+# Each run picks one of these at random and searches Rakuten Travel.
+# Mix destinations and themes; add/remove whatever fits your page.
+search_keywords:
+  - 伊勢志摩 温泉
+  - 箱根 露天風呂付き客室
+  - 熱海 オーシャンビュー
+  - 伊豆 温泉 旅館
+  - 草津温泉
+  - 有馬温泉
+  - 城崎温泉
+  - 由布院 温泉
+  - 別府 温泉
+  - 黒川温泉
+  - 道後温泉
+  - 下呂温泉
+  - 鬼怒川温泉
+  - 軽井沢 リゾート
+  - 白浜 温泉
+  - 宮古島 リゾート
+  - 石垣島 ホテル
+  - 沖縄 恩納村 リゾート
+  - 京都 旅館
+  - 金沢 温泉
+  - 登別温泉
+  - 定山渓温泉
+  - 富士山 ビュー 温泉
+  - 河口湖 温泉
+  - 南紀 オーシャンビュー
+  - 淡路島 リゾート
+  - 鳥羽 温泉
+  - 指宿 温泉
+  - 星野リゾート
+  - オールインクルーシブ
+
+# Also pull from Rakuten Travel's official rankings (genres: all, onsen, premium).
+use_rankings: true
+ranking_genres: [onsen, premium]
+
+# Only post places that are well reviewed.
+min_review_average: 4.2
+min_review_count: 50
+
+# Don't repost the same hotel within this many days.
+repost_after_days: 120
+
+# Claude model used to write the hook + details.
+model: claude-haiku-5-5   # cheapest; change to claude-sonnet-5-5 for punchier writing
+
+# Threads counts some characters as bytes, so keep the reply tight.
+# If a post is rejected for length, the bot trims and retries automatically.
+max_details_chars: 170
