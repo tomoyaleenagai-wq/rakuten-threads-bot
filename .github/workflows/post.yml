@@ -1,0 +1,24 @@
+name: Refresh Threads token
+
+on:
+  schedule:
+    - cron: "17 1 * * 1"   # every Monday 10:17 JST
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Refresh and save new token
+        env:
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: |
+          NEW=$(python bot/refresh_token.py)
+          echo "::add-mask::$NEW"
+          gh secret set THREADS_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY" --body "$NEW"
