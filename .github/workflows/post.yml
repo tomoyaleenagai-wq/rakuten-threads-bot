@@ -1,24 +1,67 @@
-name: Refresh Threads token
+name: Post to Threads
 
 on:
   schedule:
-    - cron: "17 1 * * 1"   # every Monday 10:17 JST
+    # UTC times (JST minus 9h): 7:40, 12:10, 17:50, 20:20, 22:40 JST
+    - cron: "40 22 * * *"
+    - cron: "10 3 * * *"
+    - cron: "50 8 * * *"
+    - cron: "20 11 * * *"
+    - cron: "40 13 * * *"
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Preview only (don't post)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: post-to-threads
+  cancel-in-progress: false
 
 jobs:
-  refresh:
+  post:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install requests
-      - name: Refresh and save new token
-        env:
-          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
-          GH_TOKEN: ${{ secrets.GH_PAT }}
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Random delay (0-15 min) so posts don't look robotic
+        if: github.event_name == 'schedule'
+        run: sleep $(( RANDOM % 900 ))
+
+      - name: Git identity (for saving photos / history)
         run: |
-          NEW=$(python bot/refresh_token.py)
-          echo "::add-mask::$NEW"
-          gh secret set THREADS_ACCESS_TOKEN --repo "$GITHUB_REPOSITORY" --body "$NEW"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Run bot
+        env:
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && '1' || '' }}
+          RAKUTEN_APP_ID: ${{ secrets.RAKUTEN_APP_ID }}
+          RAKUTEN_ACCESS_KEY: ${{ secrets.RAKUTEN_ACCESS_KEY }}
+          RAKUTEN_AFFILIATE_ID: ${{ secrets.RAKUTEN_AFFILIATE_ID }}
+          RAKUTEN_ALLOWED_SITE: ${{ vars.RAKUTEN_ALLOWED_SITE }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          THREADS_ACCESS_TOKEN: ${{ secrets.THREADS_ACCESS_TOKEN }}
+          THREADS_USER_ID: ${{ secrets.THREADS_USER_ID }}
+        run: python -m bot.main
+
+      - name: Save posting history
+        if: always()
+        run: |
+          git add data/posted.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "posted $(date -u +%F_%H%M)"
+          git pull --rebase
+          git push
