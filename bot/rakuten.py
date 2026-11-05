@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import os
 import random
+import re
 import time
 from typing import Any
+from urllib.parse import urlsplit
 
 import requests
 
@@ -17,14 +19,35 @@ RANKING = f"{BASE}/HotelRanking/20170426"
 class RakutenClient:
     def __init__(self, app_id: str | None = None, access_key: str | None = None,
                  affiliate_id: str | None = None, session: requests.Session | None = None):
-        self.app_id = app_id or os.environ["RAKUTEN_APP_ID"]
-        self.access_key = access_key or os.environ["RAKUTEN_ACCESS_KEY"]
-        self.affiliate_id = affiliate_id or os.environ["RAKUTEN_AFFILIATE_ID"]
+        clean = lambda v: (v or "").strip().strip('"').strip("'").strip()  # noqa: E731
+        self.app_id = clean(app_id or os.environ["RAKUTEN_APP_ID"])
+        self.access_key = clean(access_key or os.environ["RAKUTEN_ACCESS_KEY"])
+        self.affiliate_id = clean(affiliate_id or os.environ["RAKUTEN_AFFILIATE_ID"])
         self.http = session or requests.Session()
+        headers = {"accessKey": self.access_key}
         # If the Rakuten app restricts "Allowed websites", present that site as the origin.
-        site = os.environ.get("RAKUTEN_ALLOWED_SITE", "").strip()
-        if site and hasattr(self.http, "headers"):
-            self.http.headers.update({"Referer": site, "Origin": site.rstrip("/")})
+        site = clean(os.environ.get("RAKUTEN_ALLOWED_SITE"))
+        if site:
+            parts = urlsplit(site)
+            headers["Referer"] = site
+            headers["Origin"] = f"{parts.scheme}://{parts.netloc}" if parts.netloc else site
+        if hasattr(self.http, "headers"):
+            self.http.headers.update(headers)
+
+    def diagnose(self) -> str:
+        """Safe summary of the credentials' *shape* (never the values) for the logs."""
+        uuid_ok = bool(re.fullmatch(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+                                    self.app_id, re.I))
+        aff_ok = bool(re.fullmatch(r"[0-9a-f]{8}(\.[0-9a-f]{8}){3}", self.affiliate_id, re.I))
+        try:
+            ip = requests.get("https://api.ipify.org", timeout=10).text
+        except Exception:
+            ip = "unknown"
+        return (f"Rakuten credentials check: app ID looks like a UUID={uuid_ok}; "
+                f"access key starts with pk_={self.access_key.startswith('pk_')}, "
+                f"length={len(self.access_key)}; affiliate ID format ok={aff_ok}; "
+                f"allowed-site header={'set' if 'Origin' in getattr(self.http, 'headers', {}) else 'not set'}; "
+                f"this run's IP={ip}")
 
     # -- low level -------------------------------------------------------
     def _get(self, url: str, **params: Any) -> dict:
@@ -43,7 +66,7 @@ class RakutenClient:
                 time.sleep(2 * (attempt + 1))
                 continue
             if r.status_code >= 400:
-                raise RuntimeError(f"Rakuten API {r.status_code}: {r.text[:300]}")
+                raise RuntimeError(f"Rakuten API {r.status_code}: {r.text[:300]}\n{self.diagnose()}")
             time.sleep(1.1)  # stay under 1 req/sec
             return r.json()
         return {}
