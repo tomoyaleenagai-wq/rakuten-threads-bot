@@ -75,12 +75,26 @@ def write_post(h: dict, cfg: dict, recent_hooks: list[str],
         max_chars=cfg["max_details_chars"],
         facts=hotel_facts(h),
     )
-    msg = client.messages.create(
-        model=cfg["model"], max_tokens=800, system=SYSTEM,
-        messages=[{"role": "user", "content": prompt}],
-    )
-    text = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
-    out = _parse_json(text)
+    last_err = None
+    for attempt in range(3):
+        msg = client.messages.create(
+            # Generous limit: newer models may "think" before answering, which uses tokens too.
+            model=cfg["model"], max_tokens=4000, system=SYSTEM,
+            messages=[{"role": "user", "content": prompt if attempt == 0 else
+                       prompt + "\n\n必ず {\"hook\":...,\"area\":...,\"body\":...} のJSONだけを出力してください。"}],
+        )
+        text = "".join(getattr(b, "text", "") for b in msg.content
+                       if getattr(b, "type", "") == "text")
+        try:
+            out = _parse_json(text)
+            break
+        except (ValueError, json.JSONDecodeError) as e:
+            kinds = [getattr(b, "type", "?") for b in msg.content]
+            print(f"  writer attempt {attempt + 1}: no usable JSON "
+                  f"(stop_reason={getattr(msg, 'stop_reason', '?')}, blocks={kinds}); retrying")
+            last_err = e
+    else:
+        raise ValueError(f"Model never returned usable JSON: {last_err}")
     return {"hook": out["hook"].strip(), "area": out["area"].strip(), "body": out["body"].strip()}
 
 
