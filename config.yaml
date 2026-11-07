@@ -47,6 +47,10 @@ min_review_count: 50
 # Don't repost the same hotel within this many days.
 repost_after_days: 120
 
+# Share of posts whose hook is written in the casual, human style
+# (e.g. 秩父にあるこの宿エモすぎる、、). The rest use the original informative style.
+casual_hook_ratio: 0.75
+
 # Claude model used to write the hook + details.
 model: claude-haiku-5-5   # cheapest; change to claude-sonnet-5-5 for punchier writing
 
