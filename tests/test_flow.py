@@ -1,5 +1,6 @@
 """Offline tests: fake Rakuten / Claude / Threads responses, real bot logic."""
 import io
+from pathlib import Path
 import json
 import random
 import types
@@ -144,3 +145,19 @@ def test_main_end_to_end(monkeypatch, tmp_path):
     monkeypatch.setenv("DRY_RUN", "1")
     fake.reset_mock()
     assert main.run() == 0 and not fake.post_images.called
+
+
+def test_daily_schedule_varies_and_matches_workflow():
+    from datetime import datetime, timedelta
+    import yaml
+    from bot import schedule
+    crons = [c["cron"] for c in yaml.safe_load(
+        (Path(__file__).parent.parent / ".github/workflows/post.yml").read_text())[True]["schedule"]]
+    assert sorted(crons) == sorted(c for c, _, _ in schedule.SLOTS.values())
+    plans = [schedule.plan_for(datetime(2026, 11, 1) + timedelta(days=i)) for i in range(60)]
+    assert {len(p) for p in plans} >= {2, 3, 4}
+    assert len({tuple(p) for p in plans}) > 30
+    for p in plans:
+        mins = [schedule._minutes(s) for s in p]
+        assert all(b - a >= schedule.MIN_GAP_MINUTES for a, b in zip(mins, mins[1:]))
+    assert schedule.plan_for(datetime(2026, 11, 7)) == schedule.plan_for(datetime(2026, 11, 7, 23))
