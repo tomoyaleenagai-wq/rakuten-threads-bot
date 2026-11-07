@@ -87,7 +87,7 @@ def run() -> int:
 
     history.append({
         "hotelNo": int(hotel["hotelNo"]), "hotelName": hotel["hotelName"],
-        "hook": written["hook"], "post_id": post_id, "reply_id": reply_id,
+        "hook": written["hook"], "hook_style": written.get("hook_style"), "post_id": post_id, "reply_id": reply_id,
         "permalink": th.permalink(post_id), "posted_at": datetime.now(JST).isoformat(),
     })
     HISTORY.write_text(json.dumps(history, ensure_ascii=False, indent=1))
