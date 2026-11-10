@@ -56,15 +56,37 @@ class ThreadsClient:
             cid = self._post(f"{self.user_id}/threads", media_type="IMAGE",
                              image_url=image_urls[0], text=text, alt_text=alt_texts[0])["id"]
             return self._publish(cid)
-        children = []
+        children = []  # (container id, url, alt)
         for url, alt in zip(image_urls, alt_texts):
-            children.append(self._post(f"{self.user_id}/threads", media_type="IMAGE",
-                                       image_url=url, is_carousel_item="true", alt_text=alt)["id"])
-        for c in children:
-            self._status(c)  # surface image fetch errors early
+            try:
+                children.append((self._post(f"{self.user_id}/threads", media_type="IMAGE",
+                                            image_url=url, is_carousel_item="true",
+                                            alt_text=alt)["id"], url, alt))
+            except ThreadsError as e:
+                print(f"  photo rejected by Threads, skipping: {url} ({e})")
+        # Each photo must finish processing before it can go into a carousel.
+        ready = [c for c in children if self._child_ready(c[0])]
+        if not ready:
+            raise ThreadsError("Threads could not process any of the photos")
+        if len(ready) == 1:  # carousel needs 2+; fall back to a single-photo post
+            return self.post_images(text, [ready[0][1]], [ready[0][2]])
         cid = self._post(f"{self.user_id}/threads", media_type="CAROUSEL",
-                         children=",".join(children), text=text)["id"]
+                         children=",".join(c[0] for c in ready), text=text)["id"]
         return self._publish(cid)
+
+    def _child_ready(self, container_id: str, tries: int = 12) -> bool:
+        """Wait until a carousel photo is FINISHED. False if it errors or never finishes."""
+        for i in range(tries):
+            try:
+                status = self._status(container_id)
+            except ThreadsError as e:
+                print(f"  photo {container_id} failed processing, skipping ({e})")
+                return False
+            if status in ("FINISHED", ""):
+                return True
+            time.sleep(5 if i else max(self.wait / 3, 0))
+        print(f"  photo {container_id} still not ready, skipping")
+        return False
 
     def reply(self, to_id: str, text: str) -> str:
         cid = self._post(f"{self.user_id}/threads", media_type="TEXT", text=text,
