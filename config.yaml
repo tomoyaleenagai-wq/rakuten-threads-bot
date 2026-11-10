@@ -47,9 +47,31 @@ min_review_count: 50
 # Don't repost the same hotel within this many days.
 repost_after_days: 120
 
-# Share of posts whose hook is written in the casual, human style
-# (e.g. 秩父にあるこの宿エモすぎる、、). The rest use the original informative style.
-casual_hook_ratio: 0.75
+# The main post (hook). The AI writes a new one each time in the style of these
+# examples (your own posts). Add/remove lines any time to steer the style.
+hook_examples:
+  - 伊勢志摩に行くなら、ここは絶対泊まらないで、、
+  - 川崎のよさげな宿ここにある、、
+  - 東京ドームの近くのこのホテル激アツ🔥
+  - 仙台に行くなら絶対にここ泊まって、、
+  - 岡山の温泉宿あつすぎるって、、
+  - ここ大分の宿おしゃれすぎるって、、
+  - 宇都宮にある豪華すぎるホテルがやばい、、
+  - 愛知にあるこの温泉レベチすぎる、、、
+  - 山梨に行くならここしないって、、
+  - 新潟の激エモ宿見つけた、、
+  - 横浜に行くならここしないって、、、
+  - 三重に行くなら絶対にここだって、、
+
+# Backup hooks, used only if the AI's hook comes out weird. {dest} = place name.
+hook_templates:
+  - "{dest}に行くなら、ここは絶対泊まらないで、、"
+  - "{dest}のよさげな宿ここにある、、"
+  - "{dest}に行くなら絶対にここ泊まって、、"
+  - "{dest}にある宿がレベチすぎる、、、"
+  - "{dest}に行くならここしないって、、"
+  - "{dest}の激エモ宿見つけた、、"
+  - "{dest}に行くなら絶対にここだって、、"
 
 # Claude model used to write the hook + details.
 model: claude-haiku-5-5   # cheapest; change to claude-sonnet-5-5 for punchier writing
