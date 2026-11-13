@@ -174,7 +174,7 @@ def compose_reply(h: dict, written: dict, body: str | None = None) -> str:
     reviews = f"口コミ{float(avg):.2f}({int(cnt)}件)。" if avg and cnt else ""
     return (f"{h['hotelName']}({written['area']})\n"
             f"{body}{reviews}\n"
-            f"{h['hotelInformationUrl']} #PR")
+            f"{h.get('_link') or h['hotelInformationUrl']} #PR")
 
 
 def shorten(body: str) -> str:
