@@ -13,8 +13,8 @@ from pathlib import Path
 
 import yaml
 
-from . import images
-from .rakuten import RakutenClient, pick_hotel
+from . import images, upcoming
+from .rakuten import RakutenClient, good_enough, pick_hotel
 from .threads import ThreadsClient, ThreadsError
 from .writer import compose_reply, shorten, write_post
 
@@ -33,6 +33,21 @@ def recently_posted(history: list[dict], days: int) -> set[int]:
             if datetime.fromisoformat(h["posted_at"]) >= cutoff}
 
 
+def next_from_queue(client: RakutenClient, cfg: dict, queue: list[dict]) -> dict | None:
+    """Take the next hotel from data/queue.csv (short-linked ones first). Drops dead entries."""
+    for row in upcoming.next_up(queue):
+        found = client.details([int(row["hotelNo"])])
+        if found and good_enough(found[0], cfg):
+            h = found[0]
+            h["_source"] = row.get("source") or "queue"
+            h["_link"] = upcoming.short_link(row)
+            return h
+        print(f"  {row['hotel_name']} ({row['hotelNo']}) no longer qualifies; removing from list")
+        if os.environ.get("DRY_RUN", "").lower() not in ("1", "true", "yes"):
+            upcoming.save(upcoming.remove(upcoming.load(), row["hotelNo"]))
+    return None
+
+
 def summary(md: str) -> None:
     print(md)
     if os.environ.get("GITHUB_STEP_SUMMARY"):
@@ -45,11 +60,17 @@ def run() -> int:
     dry = os.environ.get("DRY_RUN", "").lower() in ("1", "true", "yes")
     history = load_history()
 
-    hotel = pick_hotel(RakutenClient(), cfg, recently_posted(history, cfg["repost_after_days"]))
+    client = RakutenClient()
+    queue = upcoming.load()
+    hotel = next_from_queue(client, cfg, queue)
+    if not hotel:  # list empty -> find one live, like before
+        skip = recently_posted(history, cfg["repost_after_days"]) | {int(r["hotelNo"]) for r in queue}
+        hotel = pick_hotel(client, cfg, skip)
     if not hotel:
         summary("No suitable hotel found this run (try adding keywords in config.yaml).")
         return 1
-    print(f"Picked {hotel['hotelName']} ({hotel['hotelNo']}) via {hotel['_source']}")
+    print(f"Picked {hotel['hotelName']} ({hotel['hotelNo']}) via {hotel['_source']}"
+          f" — link: {'your short link' if hotel.get('_link') else 'long affiliate link'}")
 
     written = write_post(hotel, cfg, [h.get("hook", "") for h in history])
     reply_text = compose_reply(hotel, written)
@@ -87,10 +108,11 @@ def run() -> int:
 
     history.append({
         "hotelNo": int(hotel["hotelNo"]), "hotelName": hotel["hotelName"],
-        "hook": written["hook"], "hook_style": written.get("hook_style"), "post_id": post_id, "reply_id": reply_id,
+        "hook": written["hook"], "post_id": post_id, "reply_id": reply_id,
         "permalink": th.permalink(post_id), "posted_at": datetime.now(JST).isoformat(),
     })
     HISTORY.write_text(json.dumps(history, ensure_ascii=False, indent=1))
+    upcoming.save(upcoming.remove(upcoming.load(), hotel["hotelNo"]))
     summary(preview + f"\nPosted: {history[-1]['permalink']}")
     return 0 if reply_id else 2
 
