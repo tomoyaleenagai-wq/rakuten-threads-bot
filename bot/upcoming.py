@@ -31,8 +31,12 @@ def load(path: Path | None = None) -> list[dict]:
     path = path or QUEUE
     if not path.exists():
         return []
+    text = path.read_text(encoding="utf-8-sig")
+    header = text.split("\n", 1)[0]
+    # Accept commas or tabs (copying from a spreadsheet/preview turns commas into tabs).
+    delim = "\t" if header.count("\t") > header.count(",") else ","
     rows = []
-    for row in csv.DictReader(io.StringIO(path.read_text(encoding="utf-8"))):
+    for row in csv.DictReader(io.StringIO(text), delimiter=delim):
         no = (row.get("hotelNo") or "").strip()
         if not no.isdigit():
             continue
