@@ -44,6 +44,9 @@ ranking_genres: [onsen, premium]
 min_review_average: 4.2
 min_review_count: 50
 
+# How many upcoming hotels to keep in data/queue.csv (for adding short links).
+queue_size: 35
+
 # Don't repost the same hotel within this many days.
 repost_after_days: 120
 
