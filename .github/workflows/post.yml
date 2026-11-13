@@ -2,20 +2,12 @@ name: Post to Threads
 
 on:
   schedule:
-    # Candidate time slots (UTC). Each day bot/schedule.py picks 2-5 of them,
-    # mostly lunch and after work, so post count and times change daily.
-    - cron: "30 22 * * *"   # 07:30 JST
-    - cron: "30 1 * * *"   # 10:30 JST
-    - cron: "40 2 * * *"   # 11:40 JST
-    - cron: "20 3 * * *"   # 12:20 JST
-    - cron: "55 3 * * *"   # 12:55 JST
-    - cron: "30 6 * * *"   # 15:30 JST
-    - cron: "10 9 * * *"   # 18:10 JST
-    - cron: "50 9 * * *"   # 18:50 JST
-    - cron: "30 10 * * *"   # 19:30 JST
-    - cron: "15 11 * * *"   # 20:15 JST
-    - cron: "20 12 * * *"   # 21:20 JST
-    - cron: "30 13 * * *"   # 22:30 JST
+    # 5 posts a day (times are UTC → JST): 07:40, 12:10, 17:50, 20:20, 22:40 JST
+    - cron: "40 22 * * *"
+    - cron: "10 3 * * *"
+    - cron: "50 8 * * *"
+    - cron: "20 11 * * *"
+    - cron: "40 13 * * *"
   workflow_dispatch:
     inputs:
       dry_run:
@@ -33,39 +25,25 @@ concurrency:
 jobs:
   post:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-
-      - name: Is this slot in today's plan?
-        id: plan
-        run: |
-          if [ "${{ github.event_name }}" = "schedule" ]; then
-            python3 -m bot.schedule "${{ github.event.schedule }}"
-          else
-            python3 -m bot.schedule
-          fi
-
       - uses: actions/setup-python@v5
-        if: steps.plan.outputs.post == 'true'
         with:
           python-version: "3.12"
           cache: pip
-      - if: steps.plan.outputs.post == 'true'
-        run: pip install -r requirements.txt
+      - run: pip install -r requirements.txt
 
-      - name: Random delay (0-20 min) so posts never land on the same minute
-        if: steps.plan.outputs.post == 'true' && github.event_name == 'schedule'
-        run: sleep $(( RANDOM % 1200 ))
+      - name: Random delay so posts don't land at the exact same minute
+        if: github.event_name == 'schedule'
+        run: sleep $(( RANDOM % 900 ))
 
       - name: Configure git
-        if: steps.plan.outputs.post == 'true'
         run: |
           git config user.name "threads-bot"
           git config user.email "threads-bot@users.noreply.github.com"
 
       - name: Find, write and post
-        if: steps.plan.outputs.post == 'true'
         env:
           RAKUTEN_APP_ID: ${{ secrets.RAKUTEN_APP_ID }}
           RAKUTEN_ACCESS_KEY: ${{ secrets.RAKUTEN_ACCESS_KEY }}
@@ -79,8 +57,8 @@ jobs:
         run: python -m bot.main
 
       - name: Save post history
-        if: always() && steps.plan.outputs.post == 'true'
+        if: always()
         run: |
           git pull --rebase --autostash || true
-          git add data/posted.json
+          git add data/posted.json data/queue.csv 2>/dev/null || git add data/posted.json
           git diff --cached --quiet || (git commit -m "post history" && git push)
