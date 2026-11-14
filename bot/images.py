@@ -49,8 +49,15 @@ def _media_base_url() -> str | None:
 def _git_push(paths: list[Path]) -> None:
     run = lambda *a: subprocess.run(["git", *a], cwd=ROOT, check=True)  # noqa: E731
     run("add", *[str(p) for p in paths])
+    # Same photo already saved by an earlier run -> nothing new to commit, it's already online.
+    if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=ROOT).returncode == 0:
+        return
     run("commit", "-m", "media for next post")
-    run("push")
+    try:
+        run("push")
+    except subprocess.CalledProcessError:  # repo moved on meanwhile (e.g. you edited a file)
+        run("pull", "--rebase", "--autostash")
+        run("push")
     time.sleep(10)  # let raw.githubusercontent.com catch up
 
 
