@@ -1,31 +1,31 @@
-hotelNo,hotel_name,source,hotel_page,short_link
-19894,石和温泉　華やぎの章　慶山,kw:河口湖 温泉,https://travel.rakuten.co.jp/HOTEL/19894/19894.html,
-141327,有馬　瑞宝園,kw:有馬温泉,https://travel.rakuten.co.jp/HOTEL/141327/141327.html,
-30888,箱根湯本温泉　ホテル南風荘,kw:箱根 露天風呂付き客室,https://travel.rakuten.co.jp/HOTEL/30888/30888.html,
-25128,有馬温泉　有馬グランドホテル,kw:有馬温泉,https://travel.rakuten.co.jp/HOTEL/25128/25128.html,
-7666,熱海温泉　秀花園湯の花膳,kw:伊豆 温泉 旅館,https://travel.rakuten.co.jp/HOTEL/7666/7666.html,
-75325,天然温泉　御所の湯　スーパーホテル京都・四条河原町,kw:京都 旅館,https://travel.rakuten.co.jp/HOTEL/75325/75325.html,
-84721,箱根湯本温泉　天成園,kw:箱根 露天風呂付き客室,https://travel.rakuten.co.jp/HOTEL/84721/84721.html,
-68528,下呂温泉　離れの宿　月のあかり,kw:下呂温泉,https://travel.rakuten.co.jp/HOTEL/68528/68528.html,
-16123,ＡＮＡインターコンチネンタル万座ビーチリゾート　ｂｙ　ＩＨＧ,kw:沖縄 恩納村 リゾート,https://travel.rakuten.co.jp/HOTEL/16123/16123.html,
-136030,ホテル・デ・ラクア宮古島　＜宮古島＞,kw:宮古島 リゾート,https://travel.rakuten.co.jp/HOTEL/136030/136030.html,
-31754,伊豆今井浜温泉　今井荘,kw:伊豆 温泉 旅館,https://travel.rakuten.co.jp/HOTEL/31754/31754.html,
-44815,由布院温泉　山のホテル　夢想園,kw:由布院 温泉,https://travel.rakuten.co.jp/HOTEL/44815/44815.html,
-15307,ＡＮＡホリデイ・インリゾート軽井沢　ｂｙ　ＩＨＧ,kw:軽井沢 リゾート,https://travel.rakuten.co.jp/HOTEL/15307/15307.html,
-195540,Ｒａｋｕｔｅｎ　ＳＴＡＹ　ＶＩＬＬＡ　由布院温泉,kw:由布院 温泉,https://travel.rakuten.co.jp/HOTEL/195540/195540.html,
-108730,下呂温泉　紅葉館別館　わん泊亭,kw:下呂温泉,https://travel.rakuten.co.jp/HOTEL/108730/108730.html,
-7616,熱海温泉　味と湯の宿　ニューとみよし,kw:熱海 オーシャンビュー,https://travel.rakuten.co.jp/HOTEL/7616/7616.html,
-75291,熱海倶楽部　迎賓館,kw:熱海 オーシャンビュー,https://travel.rakuten.co.jp/HOTEL/75291/75291.html,
-70952,天然温泉　御汲の湯　スーパーホテル御殿場１号館,kw:富士山 ビュー 温泉,https://travel.rakuten.co.jp/HOTEL/70952/70952.html,
-141326,やど　松風,kw:指宿 温泉,https://travel.rakuten.co.jp/HOTEL/141326/141326.html,
-18253,白浜古賀の井リゾート＆スパ,kw:白浜 温泉,https://travel.rakuten.co.jp/HOTEL/18253/18253.html,
-4991,伊良湖オーシャンリゾート,kw:鳥羽 温泉,https://travel.rakuten.co.jp/HOTEL/4991/4991.html,
-180588,天然温泉　鼓門の湯　スーパーホテルＰｒｅｍｉｅｒ金沢駅東口,kw:金沢 温泉,https://travel.rakuten.co.jp/HOTEL/180588/180588.html,
-2946,富士河口湖温泉　富士山の見える温泉旅館　大池ホテル,kw:河口湖 温泉,https://travel.rakuten.co.jp/HOTEL/2946/2946.html,
-1678,由布院温泉　ゆふいん山水館,kw:由布院 温泉,https://travel.rakuten.co.jp/HOTEL/1678/1678.html,
-5261,絶景温泉と魚介満腹の宿　稲取東海ホテル湯苑,kw:伊豆 温泉 旅館,https://travel.rakuten.co.jp/HOTEL/5261/5261.html,
-68195,小槌の宿　鶴亀大吉,kw:鬼怒川温泉,https://travel.rakuten.co.jp/HOTEL/68195/68195.html,
-16653,石和温泉　銘石の宿　かげつ,kw:河口湖 温泉,https://travel.rakuten.co.jp/HOTEL/16653/16653.html,
-31796,黒川温泉　湯峡の響き　優彩,kw:黒川温泉,https://travel.rakuten.co.jp/HOTEL/31796/31796.html,
-18252,有馬温泉　月光園　鴻朧館,kw:有馬温泉,https://travel.rakuten.co.jp/HOTEL/18252/18252.html,
-8147,ペット同室宿泊パイオニアの宿　きぬ川国際ホテル,kw:鬼怒川温泉,https://travel.rakuten.co.jp/HOTEL/8147/8147.html,
+hotelNo	hotel_name	source	hotel_page	short_link
+19894	石和温泉　華やぎの章　慶山	kw:河口湖 温泉	https://travel.rakuten.co.jp/HOTEL/19894/19894.html	https://a.r10.to/hFbFsf
+141327	有馬　瑞宝園	kw:有馬温泉	https://travel.rakuten.co.jp/HOTEL/141327/141327.html	https://a.r10.to/hPA5sU
+30888	箱根湯本温泉　ホテル南風荘	kw:箱根 露天風呂付き客室	https://travel.rakuten.co.jp/HOTEL/30888/30888.html	https://a.r10.to/h5rJGi
+25128	有馬温泉　有馬グランドホテル	kw:有馬温泉	https://travel.rakuten.co.jp/HOTEL/25128/25128.html	https://a.r10.to/hPBDyM
+7666	熱海温泉　秀花園湯の花膳	kw:伊豆 温泉 旅館	https://travel.rakuten.co.jp/HOTEL/7666/7666.html	https://a.r10.to/hPi04d
+75325	天然温泉　御所の湯　スーパーホテル京都・四条河原町	kw:京都 旅館	https://travel.rakuten.co.jp/HOTEL/75325/75325.html	https://a.r10.to/hROxRx
+84721	箱根湯本温泉　天成園	kw:箱根 露天風呂付き客室	https://travel.rakuten.co.jp/HOTEL/84721/84721.html	https://a.r10.to/h5keCI
+68528	下呂温泉　離れの宿　月のあかり	kw:下呂温泉	https://travel.rakuten.co.jp/HOTEL/68528/68528.html	https://a.r10.to/hgEcKB
+16123	ＡＮＡインターコンチネンタル万座ビーチリゾート　ｂｙ　ＩＨＧ	kw:沖縄 恩納村 リゾート	https://travel.rakuten.co.jp/HOTEL/16123/16123.html	https://a.r10.to/hRHeGw
+136030	ホテル・デ・ラクア宮古島　＜宮古島＞	kw:宮古島 リゾート	https://travel.rakuten.co.jp/HOTEL/136030/136030.html	https://a.r10.to/h8uu8B
+31754	伊豆今井浜温泉　今井荘	kw:伊豆 温泉 旅館	https://travel.rakuten.co.jp/HOTEL/31754/31754.html	https://a.r10.to/hgZ30D
+44815	由布院温泉　山のホテル　夢想園	kw:由布院 温泉	https://travel.rakuten.co.jp/HOTEL/44815/44815.html	https://a.r10.to/hPPHTk
+15307	ＡＮＡホリデイ・インリゾート軽井沢　ｂｙ　ＩＨＧ	kw:軽井沢 リゾート	https://travel.rakuten.co.jp/HOTEL/15307/15307.html	https://a.r10.to/hgOMK7
+195540	Ｒａｋｕｔｅｎ　ＳＴＡＹ　ＶＩＬＬＡ　由布院温泉	kw:由布院 温泉	https://travel.rakuten.co.jp/HOTEL/195540/195540.html	https://a.r10.to/hPUJyT
+108730	下呂温泉　紅葉館別館　わん泊亭	kw:下呂温泉	https://travel.rakuten.co.jp/HOTEL/108730/108730.html	https://a.r10.to/hPH13N
+7616	熱海温泉　味と湯の宿　ニューとみよし	kw:熱海 オーシャンビュー	https://travel.rakuten.co.jp/HOTEL/7616/7616.html	https://a.r10.to/h5Cqyg
+75291	熱海倶楽部　迎賓館	kw:熱海 オーシャンビュー	https://travel.rakuten.co.jp/HOTEL/75291/75291.html	https://a.r10.to/hgzHvD
+70952	天然温泉　御汲の湯　スーパーホテル御殿場１号館	kw:富士山 ビュー 温泉	https://travel.rakuten.co.jp/HOTEL/70952/70952.html	https://a.r10.to/hRMsS6
+141326	やど　松風	kw:指宿 温泉	https://travel.rakuten.co.jp/HOTEL/141326/141326.html	https://a.r10.to/h5Gy9S
+18253	白浜古賀の井リゾート＆スパ	kw:白浜 温泉	https://travel.rakuten.co.jp/HOTEL/18253/18253.html	https://a.r10.to/h8JuF6
+4991	伊良湖オーシャンリゾート	kw:鳥羽 温泉	https://travel.rakuten.co.jp/HOTEL/4991/4991.html	https://a.r10.to/hFsx0k
+180588	天然温泉　鼓門の湯　スーパーホテルＰｒｅｍｉｅｒ金沢駅東口	kw:金沢 温泉	https://travel.rakuten.co.jp/HOTEL/180588/180588.html	https://a.r10.to/h9fkjH
+2946	富士河口湖温泉　富士山の見える温泉旅館　大池ホテル	kw:河口湖 温泉	https://travel.rakuten.co.jp/HOTEL/2946/2946.html	https://a.r10.to/h55V8K
+1678	由布院温泉　ゆふいん山水館	kw:由布院 温泉	https://travel.rakuten.co.jp/HOTEL/1678/1678.html	https://a.r10.to/hgkvD9
+5261	絶景温泉と魚介満腹の宿　稲取東海ホテル湯苑	kw:伊豆 温泉 旅館	https://travel.rakuten.co.jp/HOTEL/5261/5261.html	https://a.r10.to/hPUJR9
+68195	小槌の宿　鶴亀大吉	kw:鬼怒川温泉	https://travel.rakuten.co.jp/HOTEL/68195/68195.html	https://a.r10.to/hRL82x
+16653	石和温泉　銘石の宿　かげつ	kw:河口湖 温泉	https://travel.rakuten.co.jp/HOTEL/16653/16653.html	https://a.r10.to/hYrHRZ
+31796	黒川温泉　湯峡の響き　優彩	kw:黒川温泉	https://travel.rakuten.co.jp/HOTEL/31796/31796.html	https://a.r10.to/hgkkrM
+18252	有馬温泉　月光園　鴻朧館	kw:有馬温泉	https://travel.rakuten.co.jp/HOTEL/18252/18252.html	https://a.r10.to/hgyguv
+8147	ペット同室宿泊パイオニアの宿　きぬ川国際ホテル	kw:鬼怒川温泉	https://travel.rakuten.co.jp/HOTEL/8147/8147.html	https://a.r10.to/hP0z9n
